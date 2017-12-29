@@ -1,0 +1,6 @@
+version: '3.0'
+services:
+  web:
+    environment:
+      RACK_ENV: "test"
+      DATABASE_URL: "postgres://user:pass@db:5432/db-test"

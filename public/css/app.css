@@ -1,0 +1,7 @@
+body {
+  min-height: 75rem;
+  padding-top: 4.5rem;
+}
+
+.actions { margin-bottom: 1rem; }
+.send-questions-form { margin-right: 5px; }

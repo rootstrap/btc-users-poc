@@ -1,0 +1,31 @@
+en:
+  home:
+    title: Home
+  bitcoin:
+    create_address: Create Address
+  list_addresses:
+    title: Deposit addresses
+    address: Address
+    created_at: Created
+  register:
+    title: Register
+    errors:
+      username:
+        taken: Username is already in use
+        invalid: Username is invalid
+      password:
+        invalid: Password is invalid
+    form:
+      username: Username
+      password: Password
+      submit: Signup
+  login:
+    title: Signin
+    exit: Logout
+    register: Register
+    errors:
+      username: Invalid username/password
+    form:
+      username: Username
+      password: Password
+      submit: Signin

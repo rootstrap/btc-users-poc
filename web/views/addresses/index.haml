@@ -1,0 +1,15 @@
+%h1= I18n.t('list_addresses.title')
+
+%form{method: 'post', action: '/user/addresses'}
+  = csrf.form_tag
+
+  %input.btn.btn-primary{type: 'submit', value: I18n.t('bitcoin.create_address')}
+
+%table.table.table-hover
+  %tr
+    %th= I18n.t('list_addresses.address')
+    %th= I18n.t('list_addresses.created_at')
+  - addresses.each do |address|
+    %tr
+      %td= address[:address]
+      %td= address[:created_at]

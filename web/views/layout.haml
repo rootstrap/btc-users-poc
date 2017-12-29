@@ -1,0 +1,38 @@
+!!! 5
+%html
+  %head
+    %meta{charset: 'utf-8'}
+    %meta{name: 'viewport',
+          content: 'width=device-width, initial-scale=1, shrink-to-fit=no'}
+
+    %link{rel: 'stylesheet',
+          href: 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css',
+          integrity: 'sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb',
+          crossorigin: 'anonymous'}
+
+    %link{rel: 'stylesheet', href: '/css/app.css'}
+
+    - unless current_user
+      %link{rel: 'stylesheet', href: '/css/login.css'}
+
+
+  %body{lang: I18n.locale}
+    - if current_user
+      %nav.navbar.navbar-expand-md.navbar-dark.bg-dark.fixed-top
+        %a.navbar-brand{href: '/'}= I18n.t('home.title')
+
+        .collapse.navbar-collapse
+          %ul.navbar-nav.bd-navbar-nav.flex-row
+            %li.nav-item
+              %a.nav-link{href: '/user/addresses'}
+                = I18n.t('list_addresses.title')
+
+        .align-right
+          %form.form-inline.my-2.my-lg-0{action: '/sessions/delete', method: 'post'}
+            = csrf.form_tag
+            %input.form-control.btn{type: 'submit', value: I18n.t('login.exit')}
+
+      %main.container{role: 'main'}
+        = content
+    - else
+      = content

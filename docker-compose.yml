@@ -1,0 +1,63 @@
+version: '3.0'
+services:
+  bitcoind:
+    image: kylemanna/bitcoind
+    command:
+      - bitcoind
+      - -datadir=/bitcoin
+      - -rpcport=18332
+      - -rpcallowip=::/0
+      - -debug=rpc
+      - -rpcuser=bitcoin
+      - -rpcpassword=bitcoin
+      - -printtoconsole
+      - -regtest
+      - -server
+    volumes:
+      - bitcoin:/bitcoin
+    ports:
+      #- "8333:8333"
+      - "8332:8332"
+      - "127.0.0.1:18332:18332"
+    networks:
+      - bitcoin
+  web:
+    image: ruby:2.4.1
+    command: bundle exec shotgun -p 3000 -o 0.0.0.0
+    working_dir: "/app"
+    volumes:
+      - .:/app
+      - gems:/gems
+    env_file:
+      - .env
+    environment:
+      BUNDLE_PATH: "/gems"
+      DATABASE_URL: "postgres://user:pass@db:5432/db"
+      BTC_RPC_USER: "bitcoin"
+      BTC_RPC_PASSWORD: "bitcoin"
+      BTC_RPC_HOST: "bitcoind"
+      BTC_RPC_PORT: "18332"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - database
+      - bitcoin
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "pass"
+      POSTGRES_DB: "db"
+    networks:
+      - database
+    volumes:
+      - db-data:/var/lib/postgresql/data
+volumes:
+  gems:
+  db-data:
+  bitcoin:
+networks:
+  database:
+  bitcoin:

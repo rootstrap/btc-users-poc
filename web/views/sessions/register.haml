@@ -1,0 +1,32 @@
+.container
+  %form.form-signin{method: 'post', action: '/register'}
+    = csrf.form_tag
+
+    %h2.form-signin-heading= I18n.t('register.title')
+
+    %div.form-group
+      %label.sr-only{for: 'signup-username'}= I18n.t('register.form.username')
+      %input#signin-username.form-control{type: 'text',
+                                          name: 'signup[username]',
+                                          class: errors[:username] ? 'is-invalid' : nil,
+                                          placeholder: I18n.t('register.form.username')}
+
+      - if errors[:username]
+        - errors[:username].each do |error|
+          .invalid-feedback= I18n.t('register.errors.username', error)
+
+    %div.form-group
+      %label.sr-only{for: 'signup-password'}= I18n.t('register.form.password')
+      %input#signin-password.form-control{type: 'password',
+                                          name: 'signup[password]',
+                                          class: errors[:username] ? 'is-invalid' : nil,
+                                          placeholder: I18n.t('register.form.password')}
+
+      - if errors[:password]
+        - errors[:password].each do |error|
+          .invalid-feedback= I18n.t('register.errors.password', error)
+
+    %input.btn.btn-lg.btn-primary.btn-block{type: 'submit',
+                                            value: I18n.t('register.form.submit')}
+    %a.btn.btn-secondary.btn-block{href: '/sessions/new'}
+      = I18n.t('login.title')

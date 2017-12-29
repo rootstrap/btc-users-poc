@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+bitcoin-cli \
+  -rpcuser=bitcoin \
+  -rpcpassword=bitcoin \
+  -rpcport=18332 \
+  $@

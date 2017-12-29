@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+
+set -e
+
+COMPOSE_ARGS='-f docker-compose.yml'
+RUN_ARGS='--no-deps --rm'
+COMPOSE_SERVICE='web'
+
+run() {
+  docker-compose $COMPOSE_ARGS run $RUN_ARGS $COMPOSE_SERVICE $@
+}
+
+on-test() {
+  COMPOSE_ARGS="${COMPOSE_ARGS} -f docker-compose.test.yml"
+
+  $@
+}
+
+server() {
+  RUN_ARGS="${RUN_ARGS} --service-ports"
+
+  run bundle exec shotgun -p 3000 -o 0.0.0.0
+}
+
+migrate() {
+  run bin/migrate-db $@
+}
+
+generate-migration() {
+  if [ $# -lt 1 ]; then
+    echo " Use $0 generate-migration <migration_name>" >&2
+    exit 2
+  fi
+
+  TIME=$(date +'%Y%m%d%H%M%S')
+  FILE_PATH="db/migrations/${TIME}_$1.rb"
+
+  set +e
+  EXISTING=$(ls db/migrations/*_$1.rb 2>/dev/null)
+  RESULT=$?
+  set -e
+
+  if [ $RESULT -eq 0 ]; then
+    echo " Migration name is already in use: " >&2
+
+    for I in $EXISTING; do
+      echo "   >> $I" >&2
+    done
+
+    exit 3
+  fi
+
+  echo " Creating: ${FILE_PATH}"
+  cat > $FILE_PATH <<EOF
+Sequel.migration do
+  up do
+    # TODO: Implement up
+  end
+
+  down do
+    # TODO: Implement down
+  end
+end
+EOF
+}
+
+setup() {
+  if [ ! -f .env ]; then
+    cp .env{.example,}
+  fi
+
+  docker-compose up --no-start
+  docker-compose up -d db
+  echo "Waiting for db to warm up ..."
+  sleep 2
+
+  docker-compose run --no-deps --rm web bundle install
+
+  docker-compose exec db createdb -U user db-test
+
+  # TODO: Don't try to migrate if there are no migrations
+  migrate
+  migrate-test
+
+  docker-compose stop 2>/dev/null
+}
+
+## Shortcuts
+
+migrate-test() {
+  on-test migrate $@
+}
+
+rspec() {
+  on-test run bundle exec rspec $@
+}
+
+$@
