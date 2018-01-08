@@ -3,6 +3,13 @@ module Routes
     define do
       require_login!
 
+      on(get, 'transactions') do
+        transactions = Services::BitcoinDeposits::UserDeposits
+          .perform(current_user)
+
+        render('transactions/index', transactions: transactions)
+      end
+
       on('addresses') do
         on(post) do
           Services::Bitcoin::CreateDepositAddress.perform(

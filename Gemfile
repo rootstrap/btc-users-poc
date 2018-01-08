@@ -13,6 +13,7 @@ gem 'i18n', '~> 0.8'
 gem 'bcrypt', '~> 3.1'
 gem 'rack-console', '~> 1.3'
 gem 'bitcoin-ruby', '~> 0.0.14'
+gem 'sidekiq', '~> 5.0'
 
 group :development do
   gem 'shotgun', '~> 0.9'

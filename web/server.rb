@@ -16,16 +16,24 @@ I18n.locale = :en
 
 require_relative 'helpers/login_helper'
 require_relative 'helpers/common_helper'
+require_relative 'helpers/api_helper'
+require_relative 'helpers/btc_helper'
 
 Cuba.plugin(Helpers::LoginHelper)
 Cuba.plugin(Helpers::CommonHelper)
+Cuba.plugin(Helpers::APIHelper)
+Cuba.plugin(Helpers::BTCHelper)
 
 require './app/application'
+require './app/workers'
 require_relative 'routes/sessions'
 require_relative 'routes/register'
 require_relative 'routes/user'
+require_relative 'routes/callbacks'
 
 Cuba.define do
+  on('callbacks') { run(Routes::Callbacks) }
+
   on csrf.unsafe? do
     csrf.reset!
 

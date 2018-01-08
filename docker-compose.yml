@@ -5,22 +5,54 @@ services:
     command:
       - bitcoind
       - -datadir=/bitcoin
-      - -rpcport=18332
+      - -port=8333
+      - -rpcport=8332
       - -rpcallowip=::/0
       - -debug=rpc
-      - -rpcuser=bitcoin
-      - -rpcpassword=bitcoin
+      - -rpcuser=user
+      - -rpcpassword=password
+      - -walletnotify=/myapp/post web 3000 123456 btc/%s
       - -printtoconsole
-      - -regtest
+      - -testnet
       - -server
     volumes:
-      - bitcoin:/bitcoin
+      - ./bin/:/myapp
+      - ./data:/bitcoin
     ports:
-      #- "8333:8333"
+      - "8333:8333"
       - "8332:8332"
-      - "127.0.0.1:18332:18332"
     networks:
       - bitcoin
+  redis:
+    image: redis
+    volumes:
+      - redis-data:/var/lib/redis
+    networks:
+      - redis
+  worker:
+    image: ruby:2.4.1
+    command: bundle exec sidekiq -r ./workers.rb
+    working_dir: "/app"
+    volumes:
+      - .:/app
+      - gems:/gems
+    env_file:
+      - .env
+    environment:
+      REDIS_URL: "redis://redis:6379/5"
+      BUNDLE_PATH: "/gems"
+      DATABASE_URL: "postgres://user:pass@db:5432/db"
+      BTC_RPC_USER: "user"
+      BTC_RPC_PASSWORD: "password"
+      BTC_RPC_HOST: "bitcoind"
+      BTC_RPC_PORT: "8332"
+    depends_on:
+      - db
+      - redis
+    networks:
+      - database
+      - bitcoin
+      - redis
   web:
     image: ruby:2.4.1
     command: bundle exec shotgun -p 3000 -o 0.0.0.0
@@ -31,19 +63,22 @@ services:
     env_file:
       - .env
     environment:
+      REDIS_URL: "redis://redis:6379/5"
       BUNDLE_PATH: "/gems"
       DATABASE_URL: "postgres://user:pass@db:5432/db"
-      BTC_RPC_USER: "bitcoin"
-      BTC_RPC_PASSWORD: "bitcoin"
+      BTC_RPC_USER: "user"
+      BTC_RPC_PASSWORD: "password"
       BTC_RPC_HOST: "bitcoind"
-      BTC_RPC_PORT: "18332"
+      BTC_RPC_PORT: "8332"
     ports:
       - "3000:3000"
     depends_on:
       - db
+      - redis
     networks:
       - database
       - bitcoin
+      - redis
   db:
     image: postgres
     environment:
@@ -57,7 +92,8 @@ services:
 volumes:
   gems:
   db-data:
-  bitcoin:
+  redis-data:
 networks:
   database:
   bitcoin:
+  redis:

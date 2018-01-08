@@ -26,9 +26,19 @@
             %li.nav-item
               %a.nav-link{href: '/user/addresses'}
                 = I18n.t('list_addresses.title')
+            %li.nav-item
+              %a.nav-link{href: '/user/transactions'}
+                = I18n.t('list_transactions.title')
 
         .align-right
           %form.form-inline.my-2.my-lg-0{action: '/sessions/delete', method: 'post'}
+            .navbar-text.mr-3
+              = current_user[:username]
+              %span.balance= dmc(current_user[:balance])
+              - if current_user[:unconfirmed_balance] > 0
+                %span.balance.unconfirmed
+                  = "(#{satoshi(current_user[:unconfirmed_balance])})"
+
             = csrf.form_tag
             %input.form-control.btn{type: 'submit', value: I18n.t('login.exit')}
 

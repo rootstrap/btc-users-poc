@@ -8,6 +8,7 @@ module Services
 
         BitcoinDepositAddress.create(
           address: result['result'],
+          total: 0,
           user_id: user.id,
           created_at: Time.now.utc
         )

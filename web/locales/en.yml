@@ -7,6 +7,12 @@ en:
     title: Deposit addresses
     address: Address
     created_at: Created
+  list_transactions:
+    title: My Deposits
+    address: Address
+    amount: Amount
+    confirmations: Confirmations
+    created_at: Date
   register:
     title: Register
     errors:
