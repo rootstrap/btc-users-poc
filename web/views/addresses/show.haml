@@ -1,0 +1,18 @@
+%h1 Order details
+
+- if address[:total].zero?
+  We are waiting for your deposit on the following address:
+
+  .mt-4
+    %strong
+      = address[:address]
+
+  %a{href: 'https://testnet.manu.backend.hamburg/faucet'}
+    Send testnet coins
+
+- else
+  Total received:
+  = btc(address[:total])
+
+  %h2.mt-4= I18n.t('list_transactions.title')
+  = partial('transactions/_list', transactions: transactions)

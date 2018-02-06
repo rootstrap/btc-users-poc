@@ -1,0 +1,15 @@
+%table.table.table-hover
+  %tr
+    %th= I18n.t('list_transactions.address')
+    %th= I18n.t('list_transactions.amount')
+    %th= I18n.t('list_transactions.confirmations')
+    %th= I18n.t('list_transactions.created_at')
+  - transactions.each do |transaction|
+    %tr
+      %td
+        %a{href: "https://testnet.blockchain.info/tx/#{transaction[:txid]}",
+           target: '_blank'}
+          = transaction[:address]
+      %td= btc(transaction[:amount])
+      %td= transaction[:confirmations]
+      %td= transaction[:created_at]

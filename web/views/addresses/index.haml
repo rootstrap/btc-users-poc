@@ -7,9 +7,14 @@
 
 %table.table.table-hover
   %tr
-    %th= I18n.t('list_addresses.address')
+    %th Total
     %th= I18n.t('list_addresses.created_at')
   - addresses.each do |address|
     %tr
-      %td= address[:address]
+      %td
+        %a{href: "/user/addresses/#{address[:address]}"}
+          - if address[:total].zero?
+            Pending
+          - else
+            = btc(address[:total])
       %td= address[:created_at]

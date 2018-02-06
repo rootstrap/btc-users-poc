@@ -11,12 +11,23 @@ module Routes
       end
 
       on('addresses') do
+        on(':address') do |address|
+          on(get, root) do
+            user_address = BitcoinDepositAddress.find(address: address)
+            transactions = Services::BitcoinDeposits::AddressDeposits
+              .perform(address)
+
+            render('/addresses/show', address: user_address,
+                                      transactions: transactions)
+          end
+        end
+
         on(post) do
-          Services::Bitcoin::CreateDepositAddress.perform(
+          address = Services::Bitcoin::CreateDepositAddress.perform(
             current_user
           )
 
-          redirect_to('/user/addresses')
+          redirect_to("/user/addresses/#{address[:address]}")
         end
 
         on(get) do

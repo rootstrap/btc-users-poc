@@ -2,13 +2,13 @@ en:
   home:
     title: Home
   bitcoin:
-    create_address: Create Address
+    create_address: New purchase
   list_addresses:
-    title: Deposit addresses
+    title: Orders
     address: Address
     created_at: Created
   list_transactions:
-    title: My Deposits
+    title: Transactions
     address: Address
     amount: Amount
     confirmations: Confirmations

@@ -34,7 +34,7 @@
           %form.form-inline.my-2.my-lg-0{action: '/sessions/delete', method: 'post'}
             .navbar-text.mr-3
               = current_user[:username]
-              %span.balance= dmc(current_user[:balance])
+              %span.balance= btc(current_user[:balance])
               - if current_user[:unconfirmed_balance] > 0
                 %span.balance.unconfirmed
                   = "(#{satoshi(current_user[:unconfirmed_balance])})"
