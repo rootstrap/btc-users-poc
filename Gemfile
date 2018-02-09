@@ -15,6 +15,10 @@ gem 'rack-console', '~> 1.3'
 gem 'bitcoin-ruby', '~> 0.0.14'
 gem 'sidekiq', '~> 5.0'
 
+group :production do
+  gem 'puma', '~> 3.11'
+end
+
 group :development do
   gem 'shotgun', '~> 0.9'
 end

@@ -8,7 +8,7 @@ HOST=bitcoin-node
 # user: rpcxuser
 # pass: tnEL1pADcm9ebBLXXsQKxyhdHlv67cdPkh3yd8T3EZs=
 BITCOIN_RPC_AUTH='rpcxuser:215548918cf3fcdc26edb9122de037ed$0f4ae538749af4a12faa12a70f3a86402c5f9042bd695bcadd52256eab7aa06e'
-CALLBACK_HOST=crypto-exchange-poc.herokuapp.com
+CALLBACK_HOST=crypto-exchange-node.herokuapp.com
 CALLBACK_KEY=HRdIflAdDf-OPjRz5wBiJi2BwavkpwbmQz5cl8YID4g=
 # if set to "1", use the test network
 BITCOIN_TESTNET=1
